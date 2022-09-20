@@ -1,0 +1,68 @@
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+    <meta
+      name="viewport"
+      content="initial-scale=1, maximum-scale=1,user-scalable=yes"
+    />
+    <!-- 
+    ArcGIS API for JavaScript, https://js.arcgis.com
+    For more information about the map_currentextent sample, read the original sample description at developers.arcgis.com.
+    https://developers.arcgis.com/javascript/3/jssamples/map_currentextent.html  
+    -->
+    <title>Lambert Extent Grabber</title>
+
+    <link
+      rel="stylesheet"
+      href="https://js.arcgis.com/3.41/dijit/themes/claro/claro.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://js.arcgis.com/3.41/esri/css/esri.css"
+    />
+
+    <script src="https://js.arcgis.com/3.41/"></script>
+    <script>
+      require(["esri/basemaps", "esri/map", "dojo/domReady!"], function (
+        esriBasemaps,
+        Map
+      ) {
+        // lambert basemap
+        esriBasemaps.lambert = {
+          baseMapLayers: [
+            {
+              url: "https://maps-cartes.services.geo.ca/server2_serveur2/rest/services/BaseMaps/CBMT_CBCT_GEOM_3978/MapServer",
+            },
+          ],
+        };
+
+        // make a map
+        var map = new Map("map", {
+          basemap: "lambert",
+        });
+
+        // run stuff when extent changes
+        map.on("extent-change", showExtent);
+
+        // make a json-ish string for someone to copy
+        function showExtent(bundle) {
+          var extent = bundle.extent;
+          var s = `"xmin": ${extent.xmin.toFixed(
+            2
+          )}, "ymin": ${extent.ymin.toFixed(2)}, "xmax": ${extent.xmax.toFixed(
+            2
+          )}, "ymax": ${extent.ymax.toFixed(2)}`;
+          dojo.byId("info").innerHTML = s;
+        }
+      });
+    </script>
+  </head>
+  <body class="claro">
+    <div id="map" style="height: 600px; border: 1px solid #000"></div>
+    <div
+      id="info"
+      style="padding: 5px; margin: 5px; background-color: #eee"
+    ></div>
+  </body>
+</html>
